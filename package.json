@@ -10,7 +10,7 @@
   "dependencies": {
     "algoliasearch": "^3.32.0",
     "axios": "^0.18.0",
-    "bcrypt": "^3.0.3",
+    "bcrypt": "^3.0.8",
     "body-parser": "^1.18.3",
     "bulma": "^0.7.2",
     "cache-loader": "^2.0.1",
@@ -47,12 +47,12 @@
     "@vue/cli-plugin-eslint": "^3.4.0",
     "@vue/cli-service": "^3.4.0",
     "babel-eslint": "^10.0.1",
+    "css-loader": "^2.1.0",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
-    "vue-template-compiler": "^2.5.21",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.13.1",
     "sass-loader": "^7.1.0",
-    "css-loader": "^2.1.0"
+    "vue-template-compiler": "^2.5.21"
   },
   "eslintConfig": {
     "root": true,
