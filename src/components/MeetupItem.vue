@@ -1,6 +1,9 @@
 <template>
   <div class="column is-one-third">
-    <div class="card large">
+    <router-link
+      :to="{ name: 'PageMeetupDetail', params: { id: meetup._id } }"
+      class="card large"
+    >
       <div class="card-image">
         <figure class="image is-4by3">
           <img :src="meetup.image" alt="Image" />
@@ -11,8 +14,8 @@
           <div class="media-left">
             <div class="level-item has-text-centered">
               <div>
-                <p class="title">{{ meetup.startDate | formatDate('MMM') }}</p>
-                <p class="title">{{ meetup.startDate | formatDate('D') }}</p>
+                <p class="title">{{ meetup.startDate | formatDate("MMM") }}</p>
+                <p class="title">{{ meetup.startDate | formatDate("D") }}</p>
               </div>
             </div>
           </div>
@@ -32,7 +35,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 
