@@ -11,6 +11,15 @@ exports.getUsers = function(req, res) {
   });
 };
 
+exports.getCurrentUser = (req, res, next) => {
+  const user = req.user;
+  if (!user) {
+    return res.sendStatus(422);
+  }
+
+  return res.json(user);
+};
+
 exports.register = (req, res) => {
   const registerData = req.body;
 
@@ -29,7 +38,7 @@ exports.register = (req, res) => {
     });
   }
 
-  if (!registerData.password !== registerData.passwordConfirmation) {
+  if (registerData.password !== registerData.passwordConfirmation) {
     return res.status(422).json({
       errors: {
         password: "is not the same as confirmation password"
