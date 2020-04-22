@@ -17,7 +17,7 @@ exports.getCurrentUser = (req, res, next) => {
     return res.sendStatus(422);
   }
 
-  return res.json(user);
+  return res.json(user.toAuthJSON());
 };
 
 exports.register = (req, res) => {
@@ -26,14 +26,16 @@ exports.register = (req, res) => {
   if (!registerData.email) {
     return res.status(422).json({
       errors: {
-        email: "is required"
+        email: "is required",
+        message: "Email is required"
       }
     });
   }
   if (!registerData.password) {
     return res.status(422).json({
       errors: {
-        password: "is required"
+        password: "is required",
+        message: "Password is required"
       }
     });
   }
@@ -41,7 +43,8 @@ exports.register = (req, res) => {
   if (registerData.password !== registerData.passwordConfirmation) {
     return res.status(422).json({
       errors: {
-        password: "is not the same as confirmation password"
+        password: "is not the same as confirmation password",
+        message: "Password is not the same as confirmation password"
       }
     });
   }
@@ -61,14 +64,16 @@ exports.login = (req, res, next) => {
   if (!email) {
     return res.status(422).json({
       errors: {
-        email: "is required"
+        email: "is required",
+        message: "Email is required"
       }
     });
   }
   if (!password) {
     return res.status(422).json({
       errors: {
-        password: "is required"
+        password: "is required",
+        message: "Password is required"
       }
     });
   }
@@ -76,14 +81,16 @@ exports.login = (req, res, next) => {
   return passport.authenticate("local", (err, passportUser) => {
     if (err) return next(err);
     if (passportUser) {
-      req.login(passportUser, err => {
-        if (err) next(err);
-        return res.json(passportUser);
-      });
+      // req.login(passportUser, err => {
+      //   if (err) next(err);
+      //   return res.json(passportUser);
+      // });
+
+      return res.json(passportUser.toAuthJSON());
     } else {
       return res.status(422).send({
         errors: {
-          authentication: "Ooops, Something went wrong!"
+          message: "Invalid password or email!"
         }
       });
     }

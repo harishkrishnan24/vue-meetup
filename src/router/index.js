@@ -77,7 +77,7 @@ router.beforeEach((to, from, next) => {
       } else {
         next({ name: "PageNotAuthenticated" });
       }
-    } else if (to.neta.onlyGuestUser) {
+    } else if (to.meta.onlyGuestUser) {
       if (isAuthenticated) {
         next({ name: "PageHome" });
       } else {

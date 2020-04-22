@@ -197,7 +197,11 @@ export default {
         .then(() => {
           this.$router.push("/login");
         })
-        .catch(() => {});
+        .catch(err => {
+          this.$toasted.error(err, {
+            duration: 5000
+          });
+        });
     }
   }
 };
