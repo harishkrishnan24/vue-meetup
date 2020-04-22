@@ -17,12 +17,11 @@
     </div>
     <div class="field">
       <label class="title m-b-sm">Starts At</label>
-      <input
-        v-model="form.startDate"
-        @blur="$v.form.startDate.$touch()"
-        class="input"
-        type="text"
-        placeholder="Starts At"
+      <datepicker
+        :input-class="'input'"
+        @input="setDate"
+        :disabledDates="disabledDates"
+        :placeholder="new Date() | formatDate"
       />
       <div v-if="$v.form.startDate.$error">
         <span v-if="!$v.form.startDate.required" class="help is-danger"
@@ -32,22 +31,16 @@
     </div>
     <div class="field">
       <label class="title m-b-sm">From</label>
-      <input
-        v-model="form.timeFrom"
-        @blur="$v.form.timeFrom.$touch()"
-        class="input"
-        type="text"
-        placeholder="Time From"
+      <vue-timepicker
+        @change="changeTime($event, 'timeFrom')"
+        :minute-interval="10"
       />
     </div>
     <div class="field">
       <label class="title m-b-sm">To</label>
-      <input
-        v-model="form.timeTo"
-        @blur="$v.form.timeTo.$touch()"
-        class="input"
-        type="text"
-        placeholder="Time to"
+      <vue-timepicker
+        @change="changeTime($event, 'timeTo')"
+        :minute-interval="10"
       />
     </div>
     <div class="field">
@@ -80,9 +73,24 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
+import Datepicker from "vuejs-datepicker";
+import VueTimepicker from "vue2-timepicker";
+import moment from "moment";
+
 export default {
+  components: {
+    Datepicker,
+    VueTimepicker
+  },
   data() {
     return {
+      disabledDates: {
+        customPredictor: date => {
+          const today = new Date();
+          const yesterday = today.setDate(today.getDate() - 1);
+          return date < yesterday;
+        }
+      },
       form: {
         title: null,
         startDate: null,
@@ -108,7 +116,20 @@ export default {
   },
   methods: {
     emitFormData() {
-      this.$emit("stepUpdated", this.form);
+      this.$emit("stepUpdated", {
+        data: this.form,
+        isValid: !this.$v.$invalid
+      });
+    },
+    setDate(date) {
+      this.form.startDate = moment(date).format();
+      this.emitFormData();
+    },
+    changeTime({ data }, field) {
+      const minutes = data.mm || "00";
+      const hours = data.HH || "00";
+      this.form[field] = hours + ":" + minutes;
+      this.emitFormData();
     }
   }
 };

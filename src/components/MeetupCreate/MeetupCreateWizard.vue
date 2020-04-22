@@ -5,13 +5,12 @@
     </div>
     <!-- Form Steps -->
     <keep-alive>
-      <MeetupLocation v-if="currentStep === 1" @stepUpdated="mergeStepData" />
-      <MeetupDetail v-if="currentStep === 2" @stepUpdated="mergeStepData" />
-      <MeetupDescription
-        v-if="currentStep === 3"
+      <component
+        :is="currentComponent"
         @stepUpdated="mergeStepData"
+        ref="currentComponent"
+        :meetupToCreate="form"
       />
-      <MeetupConfirmation v-if="currentStep === 4" :meetupToCreate="form" />
     </keep-alive>
 
     <progress class="progress" :value="currentProgress" max="100"
@@ -27,6 +26,7 @@
       </button>
       <button
         v-if="currentStep !== allStepsCount"
+        :disabled="!canProceed"
         @click="moveToNextStep"
         class="button is-primary"
       >
@@ -66,23 +66,40 @@ export default {
         timeFrom: null
       },
       currentStep: 1,
-      allStepsCount: 4
+      canProceed: false,
+      formSteps: [
+        "MeetupLocation",
+        "MeetupDetail",
+        "MeetupDescription",
+        "MeetupConfirmation"
+      ]
     };
   },
   computed: {
     currentProgress() {
       return (100 / this.allStepsCount) * this.currentStep;
+    },
+    allStepsCount() {
+      return this.formSteps.length;
+    },
+    currentComponent() {
+      return this.formSteps[this.currentStep - 1];
     }
   },
   methods: {
     moveToNextStep() {
       this.currentStep++;
+      this.$nextTick(() => {
+        this.canProceed = !this.$refs["currentComponent"].$v.$invalid;
+      });
     },
     moveToPreviousStep() {
       this.currentStep--;
+      this.canProceed = true;
     },
-    mergeStepData(stepData) {
-      this.form = { ...this.form, ...stepData };
+    mergeStepData({ data, isValid }) {
+      this.form = { ...this.form, ...data };
+      this.canProceed = isValid;
     }
   }
 };
