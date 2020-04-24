@@ -21,6 +21,9 @@ export default new Vuex.Store({
     },
     setItem(state, { resource, item }) {
       state[resource].item = item;
+    },
+    addItemToArray(state, { resource, item, index }) {
+      Vue.set(state[resource].items, index, item);
     }
   }
 });
