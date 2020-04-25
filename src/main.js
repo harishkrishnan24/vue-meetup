@@ -1,6 +1,7 @@
 import Vue from "vue";
 import vuelidate from "vuelidate";
 import Toasted from "vue-toasted";
+import AppSocket from "./plugins/socket";
 
 import App from "./App.vue";
 
@@ -21,6 +22,9 @@ Vue.component("AppSpinner", AppSpinner);
 
 Vue.use(vuelidate);
 Vue.use(Toasted);
+Vue.use(AppSocket, {
+  connection: "http://localhost:3001"
+});
 
 Vue.filter("capitalize", value => {
   if (value && typeof value === "string") {

@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const config = require("./config/dev");
 
 // const session = require("express-session");
-const passport = require("passport");
+// const passport = require("passport");
 // const MongoDBStore = require("connect-mongodb-session")(session);
 
 // const store = new MongoDBStore({
@@ -34,6 +34,9 @@ mongoose
   .catch(err => console.log(err));
 
 const app = express();
+const server = require("http").createServer(app);
+const io = require("socket.io")(server, { pingTimeout: 60000 });
+require("./socket")(io);
 
 app.use(bodyParser.json());
 
