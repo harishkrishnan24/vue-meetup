@@ -24,7 +24,6 @@
             <div class="post-content">
               <!-- Post User Name -->
               <strong class="author">{{ post.user.name }}</strong>
-              {{ " " }}
               <!-- Post Updated at -->
               <small class="post-time">{{ post.updatedAt | fromNow }}</small>
               <br />
